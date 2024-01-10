@@ -6,17 +6,13 @@
 #include <SPI.h>
 
 
-/* Uncomment to initialize the I2C address, uncomment only one. If you get a totally blank screen, try the other */
-#define i2c_Address 0x3c // Initialize with the I2C addr 0x3C Typically eBay OLED's
-//#define i2c_Address 0x3d // Initialize with the I2C addr 0x3D Typically Adafruit OLED's
-
-#define SCREEN_WIDTH 128  // OLED display width, in pixels
-#define SCREEN_HEIGHT 64  // OLED display height, in pixels
-#define OLED_RESET -1     // QT-PY / XIAO
+#define i2c_Address 0x3c 
+#define SCREEN_WIDTH 128  
+#define SCREEN_HEIGHT 64  
+#define OLED_RESET -1     
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 const uint8_t PROGMEM sc1[] = {
-// 'sc1', 128x64px
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
@@ -85,10 +81,6 @@ const uint8_t PROGMEM sc1[] = {
 
 
 const uint8_t PROGMEM sc2[] = {
-  
-}
-// 'sc1', 128x64px
-// 'sc1', 128x64px
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
@@ -167,8 +159,8 @@ void setup() {
   Serial.begin(9600);
   pinMode(ledPin, OUTPUT);
   IrReceiver.begin(irReceiverPin, ENABLE_LED_FEEDBACK);
-  delay(250); // wait for the OLED to power up
-  display.begin(i2c_Address, true); // Address 0x3C default
+  delay(250); 
+  display.begin(i2c_Address, true); 
   display.display();
 
 
@@ -176,7 +168,7 @@ void setup() {
   ESP32PWM::allocateTimer(1);
   ESP32PWM::allocateTimer(2);
   ESP32PWM::allocateTimer(3);
-  myservo.setPeriodHertz(50);    // standard 50 hz servo
+  myservo.setPeriodHertz(50);    
   myservo.attach(servoPin, 1000, 2000); 
 }
 
@@ -187,27 +179,25 @@ void loop() {
     if (command>100){
     delay(100);
     screen1();
-    for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
-      // in steps of 1 degree
-      myservo.write(pos);    // tell servo to go to position in variable 'pos'
-      delay(8);             // waits 15ms for the servo to reach the position
+    for (pos = 0; pos <= 180; pos += 1) { 
+      myservo.write(pos);    
+      delay(8);             
     }
     animation();
-    for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
-      myservo.write(pos);    // tell servo to go to position in variable 'pos'
-      delay(8);             // waits 15ms for the servo to reach the position
+    for (pos = 180; pos >= 0; pos -= 1) { 
+      myservo.write(pos);   
+      delay(8);             
     }
 
     screen1();
-    for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
-      // in steps of 1 degree
-      myservo.write(pos);    // tell servo to go to position in variable 'pos'
-      delay(8);             // waits 15ms for the servo to reach the position
+    for (pos = 0; pos <= 180; pos += 1) { 
+      myservo.write(pos);    
+      delay(8);             
     }
     animation();
-    for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
-      myservo.write(pos);    // tell servo to go to position in variable 'pos'
-      delay(8);             // waits 15ms for the servo to reach the position
+    for (pos = 180; pos >= 0; pos -= 1) { 
+      myservo.write(pos);    
+      delay(8);             
     }
     }
 
@@ -219,26 +209,22 @@ void loop() {
 
 void screen1() {
   display.clearDisplay();
-
-  // Display the custom bitmap
   display.drawBitmap(0, 0, sc1, SCREEN_WIDTH, SCREEN_HEIGHT, SH110X_WHITE);
   display.display();
 }
 
 void screen2() {
   display.clearDisplay();
-
-  // Display the custom bitmap
   display.drawBitmap(0, 0, sc2, SCREEN_WIDTH, SCREEN_HEIGHT, SH110X_WHITE);
   display.display();
 }
 
 void animation(){
   screen1();
-  delay(50);             // waits 15ms for the servo to reach the position
+  delay(50);             
   screen2();
-  delay(50);             // waits 15ms for the servo to reach the position
+  delay(50);            
   screen1();
-  delay(50);             // waits 15ms for the servo to reach the position
+  delay(50);     
   screen2();
 }
